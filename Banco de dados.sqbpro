@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?><sqlb_project><db path="C:/Users/ericb/Documents/GitHub/Curso back-end LCCV/GRAD-API/Grad.db" readonly="0" foreign_keys="1" case_sensitive_like="0" temp_store="0" wal_autocheckpoint="1000" synchronous="2"/><attached/><window><main_tabs open="structure browser pragmas query" current="3"/></window><tab_structure><column_width id="0" width="300"/><column_width id="1" width="0"/><column_width id="2" width="125"/><column_width id="3" width="2494"/><column_width id="4" width="0"/><expanded_item id="0" parent="1"/><expanded_item id="1" parent="1"/><expanded_item id="2" parent="1"/><expanded_item id="3" parent="1"/></tab_structure><tab_browse><current_table name="4,6:mainalunos"/><default_encoding codec=""/><browse_table_settings><table schema="main" name="alunos" show_row_id="0" encoding="" plot_x_axis="" unlock_view_pk="_rowid_"><sort><column index="5" mode="0"/></sort><column_widths><column index="1" value="300"/><column index="2" value="122"/><column index="3" value="88"/><column index="4" value="190"/><column index="5" value="94"/><column index="6" value="157"/><column index="7" value="68"/><column index="8" value="300"/></column_widths><filter_values/><conditional_formats/><row_id_formats/><display_formats/><hidden_columns/><plot_y_axes/><global_filter/></table><table schema="main" name="alunos_disciplinas" show_row_id="0" encoding="" plot_x_axis="" unlock_view_pk="_rowid_"><sort/><column_widths><column index="1" value="337"/><column index="2" value="346"/></column_widths><filter_values/><conditional_formats/><row_id_formats/><display_formats/><hidden_columns/><plot_y_axes/><global_filter/></table><table schema="main" name="cursos" show_row_id="0" encoding="" plot_x_axis="" unlock_view_pk="_rowid_"><sort><column index="1" mode="0"/></sort><column_widths><column index="1" value="333"/><column index="2" value="160"/><column index="3" value="186"/><column index="4" value="119"/></column_widths><filter_values/><conditional_formats/><row_id_formats/><display_formats/><hidden_columns/><plot_y_axes/><global_filter/></table><table schema="main" name="disciplinas" show_row_id="0" encoding="" plot_x_axis="" unlock_view_pk="_rowid_"><sort/><column_widths><column index="1" value="300"/><column index="2" value="188"/><column index="3" value="129"/><column index="4" value="124"/><column index="5" value="266"/></column_widths><filter_values/><conditional_formats/><row_id_formats/><display_formats/><hidden_columns/><plot_y_axes/><global_filter/></table><table schema="main" name="professores" show_row_id="0" encoding="" plot_x_axis="" unlock_view_pk="_rowid_"><sort/><column_widths><column index="1" value="52"/><column index="2" value="52"/><column index="3" value="58"/><column index="4" value="56"/></column_widths><filter_values/><conditional_formats/><row_id_formats/><display_formats/><hidden_columns/><plot_y_axes/><global_filter/></table></browse_table_settings></tab_browse><tab_sql><sql name="Criar Tabelas">DROP TABLE IF EXISTS alunos_disciplinas;
+DROP TABLE IF EXISTS alunos;
+DROP TABLE IF EXISTS cursos;
+DROP TABLE IF EXISTS disciplinas;
+DROP TABLE IF EXISTS professores;
+
+CREATE TABLE &quot;cursos&quot; (
+	&quot;id&quot; varchar(50) PRIMARY KEY,
+	&quot;nome&quot; varchar(50) UNIQUE NOT NULL,
+	&quot;ano_criacao_curso&quot; int NOT NULL,
+	&quot;predio&quot; varchar(50) NOT NULL,
+	&quot;coordenador&quot; varchar(50)
+);
+
+CREATE TABLE &quot;alunos&quot; (
+	&quot;id&quot; varchar(50) PRIMARY KEY,
+	&quot;cpf&quot; varchar(14) UNIQUE NOT NULL,
+	&quot;nome&quot; varchar(255) NOT NULL,
+	&quot;data_de_nascimento&quot; varchar(10) NOT NULL,
+	&quot;rg&quot; varchar(50),
+	&quot;orgao_expedidor&quot; varchar(10),
+	&quot;estado&quot; varchar(2),
+	&quot;curso_id&quot; varchar(50) NOT NULL,
+	FOREIGN KEY(curso_id) REFERENCES cursos(id)
+);
+
+CREATE TABLE &quot;disciplinas&quot; (
+	&quot;id&quot; varchar(50) PRIMARY KEY,
+	&quot;nome&quot; varchar(50) UNIQUE NOT NULL,
+	&quot;codigo&quot; varchar(15) NOT NULL,
+	&quot;descricao&quot; varchar(255) NOT NULL,
+	&quot;professor_id&quot; varchar(50) NOT NULL
+);
+
+CREATE TABLE &quot;alunos_disciplinas&quot; (
+	&quot;aluno_id&quot; varchar(50) NOT NULL,
+	&quot;disciplina_id&quot; varchar(50) NOT NULL,
+	FOREIGN KEY(aluno_id) REFERENCES alunos(id)
+	FOREIGN KEY(disciplina_id) REFERENCES disciplinas(id)
+);
+
+CREATE TABLE &quot;professores&quot; (
+	&quot;id&quot; varchar(50) PRIMARY KEY,	
+	&quot;cpf&quot; varcar(14) UNIQUE NOT NULL,
+	&quot;nome&quot; varchar(255) NOT NULL,
+	&quot;titulo&quot; varchar(20) NOT NULL
+);
+
+
+</sql><sql name="Reading">SELECT alunos.nome, disciplinas.nome FROM alunos
+	JOIN alunos_disciplinas on alunos.id = alunos_disciplinas.aluno_id
+	JOIN disciplinas on disciplinas.id = alunos_disciplinas.disciplina_id
+	WHERE cpf=&quot;112.123.456-74&quot;;
+	
+
+INSERT INTO cursos VALUES(&quot;48c4eb4e-9208-4f3c-9c0b-e86e24ebf162&quot;,&quot;Engenharia Civil&quot;,&quot;1984&quot;,&quot;Fulano&quot;);
+INSERT INTO cursos VALUES(&quot;ddb6bbfb-0382-4ecc-8724-5f4cd683830b&quot;,&quot;Direito&quot;,&quot;1990&quot;,&quot;Cicrano&quot;);
+INSERT INTO cursos VALUES(&quot;11a95472-7406-4fcf-943a-e1b89ceabc28&quot;,&quot;Recursos Humanos&quot;,&quot;2000&quot;,&quot;Beltrano&quot;);
+
+INSERT INTO disciplinas VALUES( &quot;0f7f1791-9c20-447d-a316-180ae972ab37&quot;, &quot;Algebra linear&quot;, &quot;LUCAS&quot;, &quot;60h&quot;, &quot;12h00&quot;);
+INSERT INTO disciplinas VALUES( &quot;412be4d7-8555-45aa-83b8-86159b32caba&quot;, &quot;Direito comercial&quot;, &quot;PEDRO&quot;, &quot;60h&quot;, &quot;12h10&quot;);
+INSERT INTO disciplinas VALUES( &quot;af6a5f49-8488-4e20-afdf-9a9d1a27731e&quot;, &quot;Relações interpessoais&quot;, &quot;JORGE&quot;, &quot;60h&quot;, &quot;15h40&quot;);
+INSERT INTO disciplinas VALUES( &quot;acdc807f-0845-4384-93b3-290a68ba7855&quot;, &quot;Metodologia científica&quot;, &quot;FRED&quot;, &quot;30h&quot;, &quot;14h20&quot;);
+INSERT INTO disciplinas VALUES( &quot;95bf9782-f56c-41a5-9760-c9c86f18193d&quot;, &quot;Introdução à engenharia&quot;, &quot;IGOR&quot;, &quot;30h&quot;, &quot;08h00&quot;);
+	
+INSERT INTO alunos VALUES( &quot;4378d085-9968-4a71-afc5-d0fbfc4d5e67&quot;, &quot;112.123.456-78&quot;, &quot;ERIC BRITO&quot;, 26, &quot;1234-4&quot;, &quot;SEDS-AL&quot;, &quot;48c4eb4e-9208-4f3c-9c0b-e86e24ebf162&quot;);
+INSERT INTO alunos VALUES( &quot;d75c901e-2887-4a8c-9f7f-09e75bc6a7e7&quot;, &quot;112.123.456-77&quot;, &quot;HUGO&quot;, 34, &quot;1234-5&quot;, &quot;SEDS-AL&quot;, &quot;ddb6bbfb-0382-4ecc-8724-5f4cd683830b&quot;);
+INSERT INTO alunos VALUES( &quot;87492e08-42d0-4e8e-b7a3-bf21bbfdc1af&quot;, &quot;112.123.456-76&quot;, &quot;WALNIA&quot;, 28, &quot;1234-6&quot;, &quot;SEDS-AL&quot;, &quot;48c4eb4e-9208-4f3c-9c0b-e86e24ebf162&quot;);
+INSERT INTO alunos VALUES( &quot;18c87c2c-74c5-4a3e-a2f8-246706a4ca30&quot;, &quot;112.123.456-75&quot;, &quot;FLAVIA&quot;, 32, &quot;1234-7&quot;, &quot;SEDS-AL&quot;, &quot;11a95472-7406-4fcf-943a-e1b89ceabc28&quot;);
+INSERT INTO alunos VALUES( &quot;f00b763b-ef75-4473-a24e-e8484b6240b6&quot;, &quot;112.123.456-74&quot;, &quot;AGATHA&quot;, 0, &quot;1234-8&quot;, &quot;SEDS-AL&quot;, &quot;48c4eb4e-9208-4f3c-9c0b-e86e24ebf162&quot;);
+
+INSERT INTO alunos_disciplinas VALUES( &quot;4378d085-9968-4a71-afc5-d0fbfc4d5e67&quot;, &quot;0f7f1791-9c20-447d-a316-180ae972ab37&quot;);
+INSERT INTO alunos_disciplinas VALUES( &quot;4378d085-9968-4a71-afc5-d0fbfc4d5e67&quot;, &quot;acdc807f-0845-4384-93b3-290a68ba7855&quot;);
+INSERT INTO alunos_disciplinas VALUES( &quot;4378d085-9968-4a71-afc5-d0fbfc4d5e67&quot;, &quot;95bf9782-f56c-41a5-9760-c9c86f18193d&quot;);
+INSERT INTO alunos_disciplinas VALUES( &quot;d75c901e-2887-4a8c-9f7f-09e75bc6a7e7&quot;, &quot;412be4d7-8555-45aa-83b8-86159b32caba&quot;);
+INSERT INTO alunos_disciplinas VALUES( &quot;d75c901e-2887-4a8c-9f7f-09e75bc6a7e7&quot;, &quot;acdc807f-0845-4384-93b3-290a68ba7855&quot;);
+INSERT INTO alunos_disciplinas VALUES( &quot;87492e08-42d0-4e8e-b7a3-bf21bbfdc1af&quot;, &quot;0f7f1791-9c20-447d-a316-180ae972ab37&quot;);
+INSERT INTO alunos_disciplinas VALUES( &quot;87492e08-42d0-4e8e-b7a3-bf21bbfdc1af&quot;, &quot;acdc807f-0845-4384-93b3-290a68ba7855&quot;);
+INSERT INTO alunos_disciplinas VALUES( &quot;87492e08-42d0-4e8e-b7a3-bf21bbfdc1af&quot;, &quot;95bf9782-f56c-41a5-9760-c9c86f18193d&quot;);
+INSERT INTO alunos_disciplinas VALUES( &quot;18c87c2c-74c5-4a3e-a2f8-246706a4ca30&quot;, &quot;af6a5f49-8488-4e20-afdf-9a9d1a27731e&quot;);
+INSERT INTO alunos_disciplinas VALUES( &quot;18c87c2c-74c5-4a3e-a2f8-246706a4ca30&quot;, &quot;acdc807f-0845-4384-93b3-290a68ba7855&quot;);
+INSERT INTO alunos_disciplinas VALUES( &quot;f00b763b-ef75-4473-a24e-e8484b6240b6&quot;, &quot;0f7f1791-9c20-447d-a316-180ae972ab37&quot;);
+INSERT INTO alunos_disciplinas VALUES( &quot;f00b763b-ef75-4473-a24e-e8484b6240b6&quot;, &quot;acdc807f-0845-4384-93b3-290a68ba7855&quot;);
+INSERT INTO alunos_disciplinas VALUES( &quot;f00b763b-ef75-4473-a24e-e8484b6240b6&quot;, &quot;95bf9782-f56c-41a5-9760-c9c86f18193d&quot;);</sql><current_tab id="0"/></tab_sql></sqlb_project>
